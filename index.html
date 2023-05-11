@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Galería de imágenes con Bootstrap</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    .gallery img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Galería de imágenes con Bootstrap</h1>
+    
+
+    <form id="imageForm">
+      <div class="form-group">
+        <label for="imageInput">Seleccionar imagen(es)</label>
+        <input type="file" id="imageInput" name="images[]" multiple>
+      </div>
+      <div class="form-group">
+        <label for="descriptionInput">Descripción</label>
+        <input type="text" class="form-control" id="descriptionInput" name="description">
+      </div>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+    
+
+    <div class="gallery">
+ 
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function() {
+
+      $('#imageForm').submit(function(event) {
+        event.preventDefault();
+        
+
+        var formData = new FormData(this);
+        
+
+        $.each($('#imageInput')[0].files, function(i, file) {
+          var reader = new FileReader();
+          
+          reader.onload = function() {
+            var html = '<div class="card">';
+            html += '<img src="' + reader.result + '" class="card-img-top">';
+            html += '<div class="card-body">';
+            html += '<p class="card-text">' + $('#descriptionInput').val() + '</p>';
+            html += '<p class="card-text">' + getCurrentDateTime() + '</p>';
+            html += '</div></div>';
+            
+            $('.gallery').append(html);
+          }
+          
+          reader.readAsDataURL(file);
+        });
+        
+
+        $('#imageInput').val('');
+        $('#descriptionInput').val('');
+      });
+    });
+
+    function getCurrentDateTime() {
+      var now = new Date();
+      var day = now.getDate();
+      var month = now.getMonth() + 1;
+      var year = now.getFullYear();
+      var hours = now.getHours();
+      var minutes = now.getMinutes();
+      var seconds = now.getSeconds();
+      
+      return day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+    }
+  </script>
+</body>
+</html>
